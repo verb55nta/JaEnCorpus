@@ -9,7 +9,7 @@ import {
     Easing,
 } from 'react-native';
 
-import Modal from 'react-modal'
+import Loading from './loading'
 
 export default class App extends React.Component {
 
@@ -27,83 +27,45 @@ export default class App extends React.Component {
 
 
     render() {
+        let props = this.props;
         ///*
-        const cnt = this.props.val + 1;
-        let st = this.props.started == 1 ? <h1>{cnt} / {this.props.data.length} </h1> : "/";
-        let id = this.props.started == 1 ? <h1>{this.props.data[cnt].id}</h1> : <Text></Text>;
+        const cnt = props.val + 1;
+        let st = props.started == 1 ? <h1>{cnt} / {props.data.length} </h1> : <h1>/ {props.data.length} </h1>;
+        let id = props.started == 1 ? <h1>{props.data[cnt].id}</h1> : <Text></Text>;
 
-        let started = this.props.started === 1 ? " " : "Press start";
-        //let ja = <h1>{this.props.data[cnt].ja}</h1>;
-        let ja = this.props.started == 1 ? <h1>[ {this.props.data[cnt].ja} ]</h1> : <h1> [ {started} ] </h1>;
-        let en = this.props.availableEn == 1 ? <h1>[ {this.props.data[cnt].en} ]</h1> : <h1> [ {started} ] </h1>;
-
-        let modal_button = this.props.updateFailed == 1 ? <div>
-            <h1>Loading Failed</h1>
-            <TouchableHighlight
-                onPress={() => this.props.deletemodal()}
-                style={styles.button}
-                underlayColor={'#0A84D0'}
-            >
-                <Text style={styles.buttonText}>OK</Text>
-            </TouchableHighlight>
-        </div> : <Text> <h1>Loading...</h1> </Text>
-        let modal_update_already = <div>
-            <h1>You have already updated</h1>
-            <TouchableHighlight
-                onPress={() => this.props.deletemodal()}
-                style={styles.button}
-                underlayColor={'#0A84D0'}
-            >
-                <Text style={styles.buttonText}>OK</Text>
-            </TouchableHighlight>
-        </div>
-
-        let load = <Modal
-            isOpen={Boolean(this.props.loading)}
-            style={customStyles}
-            contentLabel="Loading-overlay"
-        >
-            {modal_button}
-        </Modal>
-
-        let update_already = <Modal
-            isOpen={Boolean(this.props.loading)}
-            style={customStyles}
-            contentLabel="Loading-overlay"
-        >
-            {modal_update_already}
-        </Modal>
-
-        let update_check = this.props.stored_complete == 1 ? update_already : load;
+        let started = props.started === 1 ? " " : "Press start";
+        //let ja = <h1>{props.data[cnt].ja}</h1>;
+        let ja = props.started == 1 ? <h1>[ {props.data[cnt].ja} ]</h1> : <h1> [ {started} ] </h1>;
+        let en = props.availableEn == 1 ? <h1>[ {props.data[cnt].en} ]</h1> : <h1> [ {started} ] </h1>;
 
         //*/
         //let load = this.state.loading == 1 ? <Loading /> : <Text></Text>;
-        //let load = this.props.loading == 1 ? <Text><h1>Loading</h1></Text> : <Text></Text>;
+        //let load = props.loading == 1 ? <Text><h1>Loading</h1></Text> : <Text></Text>;
 
         let start = <TouchableHighlight
-            onPress={() => this.props.start()}
+            onPress={() => props.start()}
             style={styles.button}
             underlayColor={'#0A84D0'}
         >
             <Text style={styles.buttonText}>Start</Text>
         </TouchableHighlight>
-        let update = <TouchableHighlight
-            onPress={() => this.props.update()}
+        let update = props.started == 1 ? <TouchableHighlight
+            onPress={() => props.update()}
             style={styles.button}
             underlayColor={'#0A84D0'}
         >
             <Text style={styles.buttonText}>Update</Text>
-        </TouchableHighlight>
+        </TouchableHighlight> : <Text></Text>
 
-        let prev = this.props.started === 1 ? <TouchableHighlight
-            onPress={() => this.props.decrease()}
+        let prev = props.started === 1 ? <TouchableHighlight
+            onPress={() => props.decrease()}
             style={styles.button}
             underlayColor={'#0A84D0'}
         >
             <Text style={styles.buttonText}>Prev</Text>
         </TouchableHighlight> : <Text></Text>;
-        let next = this.props.started === 1 ? <TouchableHighlight
-            onPress={() => this.props.increase()}
+        let next = props.started === 1 ? <TouchableHighlight
+            onPress={() => props.increase()}
             style={styles.button}
             underlayColor={'#0A84D0'}
         >
@@ -111,7 +73,7 @@ export default class App extends React.Component {
         </TouchableHighlight> : <Text></Text>;
 
         return <div>
-            {update_check}
+            <Loading props={props} />
             <View style={styles.container}>
                 {start}
                 {update}
@@ -182,13 +144,3 @@ const styles = StyleSheet.create({
     }
 });
 
-const customStyles = {
-    content: {
-        top: '50%',
-        left: '50%',
-        right: 'auto',
-        bottom: 'auto',
-        marginRight: '-50%',
-        transform: 'translate(-50%, -50%)'
-    }
-};

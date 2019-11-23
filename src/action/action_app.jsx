@@ -38,5 +38,16 @@ export default {
     updateFailed: () => {
         return { type: 'updateFailed' }
     },
-
+    updateStart: () => {
+        return { type: 'updateStart' }
+    },
+    updateCompleted: () => {
+        return { type: 'updateCompleted' }
+    },
+    createModal: () => {
+        return { type: 'createModal' }
+    },
+    deleteModal: () => {
+        return { type: 'deleteModal' }
+    }
 }

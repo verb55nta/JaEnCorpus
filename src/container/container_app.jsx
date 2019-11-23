@@ -42,19 +42,24 @@ function mapDispatchToProps(dispatch) {
             clearTime(dispatch);
         },
         update: async () => {
-
+            dispatch(Actions['updateStart']());
+            dispatch(Actions['createModal']());
             var ldata = localStorage.getItem('all');
             if (ldata != null && md5hex(JSON.stringify(ldata)) == "7ed676711475ac290adafd8368dd573f") {
                 console.log("You have already updated");
+                dispatch(Actions['updateCompleted']());
+                //dispatch(Actions['deleteModal']());
             }
             else {
-                var server = "https://kwffjv54ke.execute-api.us-east-1.amazonaws.com/Prod/helloworld?data=test_1000";
+
+                //var server = "https://kwffjv54ke.execute-api.us-east-1.amazonaws.com/Prod/helloworld?data=test_1000";
                 //var server = "https://kwffjv54ke.execute-api.us-east-1.amazonaws.com/Prod/helloworld?data=1000";
                 var server = "https://kwffjv54ke.execute-api.us-east-1.amazonaws.com/Prod/helloworld?data=test_all";
 
                 var res = null;
                 dispatch(Actions['deleteTimer']());
                 dispatch(Actions['loadStart']());
+
 
                 await axios.get(server, { params: {} })
                     .then((re) => {
@@ -76,6 +81,7 @@ function mapDispatchToProps(dispatch) {
                     clearTime(dispatch);
                     dispatch(Actions['init']());
                     dispatch(Actions['update'](d));
+                    dispatch(Actions['updateCompleted']());
                 }
             }
 
@@ -86,7 +92,7 @@ function mapDispatchToProps(dispatch) {
             dispatch(Actions['start']());
         },
         deletemodal: () => {
-            dispatch(Actions['loadEnd']())
+            dispatch(Actions['deleteModal']())
         }
 
     }

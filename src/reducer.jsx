@@ -9,8 +9,9 @@ const initialState = {
     started: 0,
     timerId: null,
     storedData: localStorage.getItem('all'),
-    stored_complete: 0,
-
+    storedComplete: 0,
+    updateFailed: 0,
+    modal: 0,
 }
 
 
@@ -25,6 +26,7 @@ export default function reducer(state = initialState, action) {
         case 'INIT': {
             var oldid = state.timerId;
             clearTimeout(oldid);
+            /*
             return Object.assign({}, state, {
                 val: 0,
                 availableEn: 0,
@@ -33,7 +35,10 @@ export default function reducer(state = initialState, action) {
                 started: 0,
                 timerId: null,
                 updateFailed: 0,
+                modal: 0,
             })
+            */
+            return initialState
         }
         case 'INCREMENT': {
             return Object.assign({}, state, {
@@ -56,12 +61,12 @@ export default function reducer(state = initialState, action) {
                 data: d,
                 updateFailed: 0,
                 storedData: localStorage.getItem('all'),
-                stored_complete: 1
             });
         }
         case 'loadStart': {
             return Object.assign({}, state, {
-                loading: 1
+                loading: 1,
+                updateFailed: 0
             })
         }
         case 'loadEnd': {
@@ -84,17 +89,7 @@ export default function reducer(state = initialState, action) {
             })
         }
         case 'start': {
-            /*
-            if (state.started === 0) {
-                return Object.assign({}, state, {
-                    started: 1,
-                    val: 0
-                })
-            }
-            else return state;
-            */
 
-            ///*
             if (state.storedData != null) {
                 var ldata_md5 = md5hex(JSON.stringify(state.storedData))
                 if (ldata_md5 == "7ed676711475ac290adafd8368dd573f") {
@@ -102,15 +97,11 @@ export default function reducer(state = initialState, action) {
                         started: 1,
                         val: 0,
                         data: JSON.parse(state.storedData),
-                        stored_complete: 1
+                        storedComplete: 1
                     })
                 }
-                /*
-                
-                */
+
             }
-            //*/
-            //console.log(md5hex("abc"));
 
             return Object.assign({}, state, {
                 started: 1,
@@ -133,9 +124,31 @@ export default function reducer(state = initialState, action) {
             clearTimeout(oldid);
             return state;
         }
+        case 'updateStart': {
+
+            return Object.assign({}, state, {
+                storedCompleted: 0
+            })
+        }
         case 'updateFailed': {
             return Object.assign({}, state, {
                 updateFailed: 1
+            })
+        }
+        case 'updateCompleted': {
+
+            return Object.assign({}, state, {
+                storedCompleted: 1
+            })
+        }
+        case 'createModal': {
+            return Object.assign({}, state, {
+                modal: 1
+            })
+        }
+        case 'deleteModal': {
+            return Object.assign({}, state, {
+                modal: 0
             })
         }
         default:
