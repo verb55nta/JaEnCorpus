@@ -35,5 +35,8 @@ export default {
     deleteTimer: () => {
         return { type: 'deleteTimer' }
     },
+    updateFailed: () => {
+        return { type: 'updateFailed' }
+    },
 
 }

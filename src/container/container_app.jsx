@@ -6,6 +6,14 @@ import Actions from '../action/action_app'
 
 import axios from 'axios';
 
+import { md5hex } from '../reducer'
+
+/*const crypto = require('crypto')
+
+function md5hex(str) {
+    const md5 = crypto.createHash('md5')
+    return md5.update(str, 'binary').digest('hex')
+}*/
 
 
 function mapStateToProps(state) {
@@ -34,35 +42,51 @@ function mapDispatchToProps(dispatch) {
             clearTime(dispatch);
         },
         update: async () => {
-            var server = "https://kwffjv54ke.execute-api.us-east-1.amazonaws.com/Prod/helloworld?data=1000";
-            //var server = "https://kwffjv54ke.execute-api.us-east-1.amazonaws.com/Prod/helloworld?data=all";
 
-            var res = null;
-            dispatch(Actions['deleteTimer']());
-            dispatch(Actions['loadStart']());
+            var ldata = localStorage.getItem('all');
+            if (ldata != null && md5hex(JSON.stringify(ldata)) == "7ed676711475ac290adafd8368dd573f") {
+                console.log("You have already updated");
+            }
+            else {
+                var server = "https://kwffjv54ke.execute-api.us-east-1.amazonaws.com/Prod/helloworld?data=test_1000";
+                //var server = "https://kwffjv54ke.execute-api.us-east-1.amazonaws.com/Prod/helloworld?data=1000";
+                var server = "https://kwffjv54ke.execute-api.us-east-1.amazonaws.com/Prod/helloworld?data=test_all";
 
-            await axios.get(server, { params: {} })
-                .then((re) => {
-                    console.log("get");
-                    res = re;
-                }, () => { }
-                ).catch(() => {
+                var res = null;
+                dispatch(Actions['deleteTimer']());
+                dispatch(Actions['loadStart']());
 
-                });
+                await axios.get(server, { params: {} })
+                    .then((re) => {
+                        console.log("get");
+                        res = re;
+                    }, () => { }
+                    ).catch(() => {
 
-            //this.data = JSON.parse(res.data.body);
-            var d = JSON.parse(res.data.body);
-            //dispatch(Actions['loadEnd']());
-            clearTime(dispatch);
-            dispatch(Actions['init']());
-            dispatch(Actions['update'](d));
-            //dispatch(Actions['initVal']());
-            //dispatch(Actions['clearStart']());
-            //dispatch(Actions['clearEn']());
+                    });
+
+                //this.data = JSON.parse(res.data.body);
+                var d = JSON.parse(res.data.body);
+
+                if (Object.keys(d).length == 0) {
+                    console.log("no data")
+                    dispatch(Actions["updateFailed"]())
+                }
+                else {
+                    clearTime(dispatch);
+                    dispatch(Actions['init']());
+                    dispatch(Actions['update'](d));
+                }
+            }
+
+
         },
         start: () => {
             clearTime(dispatch);
             dispatch(Actions['start']());
+        },
+        deletemodal: () => {
+            dispatch(Actions['loadEnd']())
         }
 
     }

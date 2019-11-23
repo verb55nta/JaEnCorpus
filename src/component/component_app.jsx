@@ -29,18 +29,53 @@ export default class App extends React.Component {
     render() {
         ///*
         const cnt = this.props.val + 1;
-        let st = <h1>{cnt} / {this.props.data.length} </h1>;
-        let id = <h1>{this.props.data[cnt].id}</h1>;
-        let ja = <h1>{this.props.data[cnt].ja}</h1>;
+        let st = this.props.started == 1 ? <h1>{cnt} / {this.props.data.length} </h1> : "/";
+        let id = this.props.started == 1 ? <h1>{this.props.data[cnt].id}</h1> : <Text></Text>;
+
         let started = this.props.started === 1 ? " " : "Press start";
+        //let ja = <h1>{this.props.data[cnt].ja}</h1>;
+        let ja = this.props.started == 1 ? <h1>[ {this.props.data[cnt].ja} ]</h1> : <h1> [ {started} ] </h1>;
         let en = this.props.availableEn == 1 ? <h1>[ {this.props.data[cnt].en} ]</h1> : <h1> [ {started} ] </h1>;
+
+        let modal_button = this.props.updateFailed == 1 ? <div>
+            <h1>Loading Failed</h1>
+            <TouchableHighlight
+                onPress={() => this.props.deletemodal()}
+                style={styles.button}
+                underlayColor={'#0A84D0'}
+            >
+                <Text style={styles.buttonText}>OK</Text>
+            </TouchableHighlight>
+        </div> : <Text> <h1>Loading...</h1> </Text>
+        let modal_update_already = <div>
+            <h1>You have already updated</h1>
+            <TouchableHighlight
+                onPress={() => this.props.deletemodal()}
+                style={styles.button}
+                underlayColor={'#0A84D0'}
+            >
+                <Text style={styles.buttonText}>OK</Text>
+            </TouchableHighlight>
+        </div>
+
         let load = <Modal
             isOpen={Boolean(this.props.loading)}
             style={customStyles}
             contentLabel="Loading-overlay"
         >
-            <h1>Loading...</h1>
+            {modal_button}
         </Modal>
+
+        let update_already = <Modal
+            isOpen={Boolean(this.props.loading)}
+            style={customStyles}
+            contentLabel="Loading-overlay"
+        >
+            {modal_update_already}
+        </Modal>
+
+        let update_check = this.props.stored_complete == 1 ? update_already : load;
+
         //*/
         //let load = this.state.loading == 1 ? <Loading /> : <Text></Text>;
         //let load = this.props.loading == 1 ? <Text><h1>Loading</h1></Text> : <Text></Text>;
@@ -76,7 +111,7 @@ export default class App extends React.Component {
         </TouchableHighlight> : <Text></Text>;
 
         return <div>
-            {load}
+            {update_check}
             <View style={styles.container}>
                 {start}
                 {update}
@@ -86,18 +121,17 @@ export default class App extends React.Component {
                 <Text>{st}</Text>
             </View>
             <View style={styles.container}>
+                {prev}
+                {next}
+            </View>
+            <View style={styles.container}>
                 <Text>{id}</Text>
             </View>
             <View style={styles.container}>
-                <Text>{ja}</Text>
+                <Text style={styles.jaText}>{ja}</Text>
             </View>
             <View style={styles.container}>
                 <Text style={styles.enText}>{en}</Text>
-            </View>
-
-            <View style={styles.container}>
-                {prev}
-                {next}
             </View>
         </div>
 
@@ -138,7 +172,12 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         fontSize: 16,
     },
+    jaText: {
+        fontSize: 10,
+        color: '#000'
+    },
     enText: {
+        fontSize: 8,
         color: '#888'
     }
 });

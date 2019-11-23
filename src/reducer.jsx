@@ -1,4 +1,5 @@
 import Initialdata from './data_100.json';
+const crypto = require('crypto')
 
 const initialState = {
     val: 0,
@@ -7,6 +8,16 @@ const initialState = {
     data: Initialdata,
     started: 0,
     timerId: null,
+    storedData: localStorage.getItem('all'),
+    stored_complete: 0,
+
+}
+
+
+
+export function md5hex(str) {
+    const md5 = crypto.createHash('md5')
+    return md5.update(str, 'binary').digest('hex')
 }
 
 export default function reducer(state = initialState, action) {
@@ -21,6 +32,7 @@ export default function reducer(state = initialState, action) {
                 data: Initialdata,
                 started: 0,
                 timerId: null,
+                updateFailed: 0,
             })
         }
         case 'INCREMENT': {
@@ -35,10 +47,16 @@ export default function reducer(state = initialState, action) {
         }
         case 'UPDATE': {
 
-            var d = action.data
+            var d = action.data;
 
+            //console.log(md5hex(JSON.stringify(d)));
+            //if (state.storedData != null) console.log(md5hex(JSON.stringify(state.storedData)));
+            localStorage.setItem('all', JSON.stringify(d))
             return Object.assign({}, state, {
-                data: d
+                data: d,
+                updateFailed: 0,
+                storedData: localStorage.getItem('all'),
+                stored_complete: 1
             });
         }
         case 'loadStart': {
@@ -75,6 +93,25 @@ export default function reducer(state = initialState, action) {
             }
             else return state;
             */
+
+            ///*
+            if (state.storedData != null) {
+                var ldata_md5 = md5hex(JSON.stringify(state.storedData))
+                if (ldata_md5 == "7ed676711475ac290adafd8368dd573f") {
+                    return Object.assign({}, state, {
+                        started: 1,
+                        val: 0,
+                        data: JSON.parse(state.storedData),
+                        stored_complete: 1
+                    })
+                }
+                /*
+                
+                */
+            }
+            //*/
+            //console.log(md5hex("abc"));
+
             return Object.assign({}, state, {
                 started: 1,
                 val: 0
@@ -95,6 +132,11 @@ export default function reducer(state = initialState, action) {
             var oldid = state.timerId;
             clearTimeout(oldid);
             return state;
+        }
+        case 'updateFailed': {
+            return Object.assign({}, state, {
+                updateFailed: 1
+            })
         }
         default:
             return state
