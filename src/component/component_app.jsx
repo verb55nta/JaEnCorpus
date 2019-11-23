@@ -9,7 +9,22 @@ import {
     Easing,
 } from 'react-native';
 
+import Modal from 'react-modal'
+
 export default class App extends React.Component {
+
+    constructor(props) {
+        super(props);
+        window.onkeydown = (e) => {
+            if (e.keyCode == 37) {
+                if (this.props.started == 1) props.decrease();
+            }
+            else if (e.keyCode == 39) {
+                if (this.props.started == 1) props.increase();
+            }
+        }
+    }
+
 
     render() {
         ///*
@@ -17,39 +32,56 @@ export default class App extends React.Component {
         let st = <h1>{cnt} / {this.props.data.length} </h1>;
         let id = <h1>{this.props.data[cnt].id}</h1>;
         let ja = <h1>{this.props.data[cnt].ja}</h1>;
-        let en = this.props.availableEn == 1 ? <h1>[ {this.props.data[cnt].en} ]</h1> : <h1> [  ] </h1>;
+        let started = this.props.started === 1 ? " " : "Press start";
+        let en = this.props.availableEn == 1 ? <h1>[ {this.props.data[cnt].en} ]</h1> : <h1> [ {started} ] </h1>;
+        let load = <Modal
+            isOpen={Boolean(this.props.loading)}
+            style={customStyles}
+            contentLabel="Loading-overlay"
+        >
+            <h1>Loading...</h1>
+        </Modal>
         //*/
         //let load = this.state.loading == 1 ? <Loading /> : <Text></Text>;
-        let load = this.props.loading == 1 ? <Text><h1>Loading</h1></Text> : <Text></Text>;
+        //let load = this.props.loading == 1 ? <Text><h1>Loading</h1></Text> : <Text></Text>;
+
+        let start = <TouchableHighlight
+            onPress={() => this.props.start()}
+            style={styles.button}
+            underlayColor={'#0A84D0'}
+        >
+            <Text style={styles.buttonText}>Start</Text>
+        </TouchableHighlight>
+        let update = <TouchableHighlight
+            onPress={() => this.props.update()}
+            style={styles.button}
+            underlayColor={'#0A84D0'}
+        >
+            <Text style={styles.buttonText}>Update</Text>
+        </TouchableHighlight>
+
+        let prev = this.props.started === 1 ? <TouchableHighlight
+            onPress={() => this.props.decrease()}
+            style={styles.button}
+            underlayColor={'#0A84D0'}
+        >
+            <Text style={styles.buttonText}>Prev</Text>
+        </TouchableHighlight> : <Text></Text>;
+        let next = this.props.started === 1 ? <TouchableHighlight
+            onPress={() => this.props.increase()}
+            style={styles.button}
+            underlayColor={'#0A84D0'}
+        >
+            <Text style={styles.buttonText}>Next</Text>
+        </TouchableHighlight> : <Text></Text>;
 
         return <div>
             {load}
             <View style={styles.container}>
+                {start}
+                {update}
+            </View>
 
-                <TouchableHighlight
-                    onPress={() => this.props.update()}
-                    style={styles.button}
-                    underlayColor={'#0A84D0'}
-                >
-                    <Text style={styles.buttonText}>Update</Text>
-                </TouchableHighlight>
-            </View>
-            <View style={styles.container}>
-                <TouchableHighlight
-                    onPress={() => this.props.decrease()}
-                    style={styles.button}
-                    underlayColor={'#0A84D0'}
-                >
-                    <Text style={styles.buttonText}>Prev</Text>
-                </TouchableHighlight>
-                <TouchableHighlight
-                    onPress={() => this.props.increase()}
-                    style={styles.button}
-                    underlayColor={'#0A84D0'}
-                >
-                    <Text style={styles.buttonText}>Next</Text>
-                </TouchableHighlight>
-            </View>
             <View style={styles.container}>
                 <Text>{st}</Text>
             </View>
@@ -62,10 +94,20 @@ export default class App extends React.Component {
             <View style={styles.container}>
                 <Text style={styles.enText}>{en}</Text>
             </View>
+
+            <View style={styles.container}>
+                {prev}
+                {next}
+            </View>
         </div>
+
+
 
     }
 }
+
+
+
 
 const styles = StyleSheet.create({
     container: {
@@ -100,3 +142,14 @@ const styles = StyleSheet.create({
         color: '#888'
     }
 });
+
+const customStyles = {
+    content: {
+        top: '50%',
+        left: '50%',
+        right: 'auto',
+        bottom: 'auto',
+        marginRight: '-50%',
+        transform: 'translate(-50%, -50%)'
+    }
+};

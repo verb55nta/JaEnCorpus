@@ -1,4 +1,7 @@
 export default {
+    init: () => {
+        return { type: 'INIT' }
+    },
     incre: () => {
         return { type: 'INCREMENT' }
     },
@@ -13,5 +16,24 @@ export default {
     },
     loadEnd: () => {
         return { type: 'loadEnd' }
-    }
+    },
+    clearEn: (id) => {
+        return { type: 'clearEn', id: id }
+    },
+    onEn: () => {
+        return { type: 'onEn' }
+    },
+    start: () => {
+        return { type: 'start' }
+    },
+    initVal: () => {
+        return { type: 'initVal' }
+    },
+    clearStart: () => {
+        return { type: 'clearStart' }
+    },
+    deleteTimer: () => {
+        return { type: 'deleteTimer' }
+    },
+
 }
