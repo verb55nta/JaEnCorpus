@@ -47,7 +47,9 @@ export default class Loading extends React.Component {
             style={customStyles}
             contentLabel="Loading-overlay"
         >
-            {modal_button}
+            <View style={styles.container}>
+                {modal_button}
+            </View>
         </Modal>
         //*/
         ///*
@@ -56,7 +58,9 @@ export default class Loading extends React.Component {
             style={customStyles}
             contentLabel="Loading-overlay"
         >
-            {modal_update_already}
+            <View style={styles.container}>
+                {modal_update_already}
+            </View>
         </Modal>
         //*/
         let update_check = props.storedComplete == 1 ? update_already : load;

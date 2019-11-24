@@ -30,7 +30,8 @@ export default class App extends React.Component {
         let props = this.props;
         ///*
         const cnt = props.val + 1;
-        let st = props.started == 1 ? <h1>{cnt} / {props.data.length} </h1> : <h1>/ {props.data.length} </h1>;
+        //let st = props.started == 1 ? <h1>{cnt} / {props.data.length} </h1> : <h1>/ {props.data.length} </h1>;
+        let st = props.started == 1 ? <h1>{cnt} / {props.data.length} </h1> : <Text></Text>;
         let id = props.started == 1 ? <h1>{props.data[cnt].id}</h1> : <Text></Text>;
 
         let started = props.started === 1 ? " " : "Press start";
