@@ -1,4 +1,4 @@
-import React from 'react'
+//import React from 'react'
 import { connect } from 'react-redux'
 
 import App from '../component/component_app'
@@ -7,13 +7,6 @@ import Actions from '../action/action_app'
 import axios from 'axios';
 
 import { md5hex } from '../reducer'
-
-/*const crypto = require('crypto')
-
-function md5hex(str) {
-    const md5 = crypto.createHash('md5')
-    return md5.update(str, 'binary').digest('hex')
-}*/
 
 
 function mapStateToProps(state) {
@@ -31,21 +24,26 @@ function mapDispatchToProps(dispatch) {
     //console.log(Actions);
     //console.log(Actions['incre']());
     return {
+        init: () => {
+            dispatch(Actions['init']());
+        },
         increase: () => {
             //dispatch({ type: 'INCREMENT' });
             dispatch(Actions['incre']());
             clearTime(dispatch);
+            dispatch(Actions['checkJudge']())
         },
         decrease: () => {
             //dispatch({ type: 'DECREMENT' });
             dispatch(Actions['decre']());
             clearTime(dispatch);
+            dispatch(Actions['checkJudge']())
         },
         update: async () => {
             dispatch(Actions['updateStart']());
             dispatch(Actions['createModal']());
             var ldata = localStorage.getItem('all');
-            if (ldata != null && md5hex(JSON.stringify(ldata)) == "7ed676711475ac290adafd8368dd573f") {
+            if (ldata != null && (md5hex(JSON.stringify(ldata)) === "7ed676711475ac290adafd8368dd573f")) {
                 console.log("You have already updated");
                 dispatch(Actions['updateCompleted']());
                 //dispatch(Actions['deleteModal']());
@@ -58,7 +56,7 @@ function mapDispatchToProps(dispatch) {
 
                 var res = null;
                 dispatch(Actions['deleteTimer']());
-                dispatch(Actions['loadStart']());
+
 
 
                 await axios.get(server, { params: {} })
@@ -73,7 +71,7 @@ function mapDispatchToProps(dispatch) {
                 //this.data = JSON.parse(res.data.body);
                 var d = JSON.parse(res.data.body);
 
-                if (Object.keys(d).length == 0) {
+                if (Object.keys(d).length === 0) {
                     console.log("no data")
                     dispatch(Actions["updateFailed"]())
                 }
@@ -90,10 +88,19 @@ function mapDispatchToProps(dispatch) {
         start: () => {
             clearTime(dispatch);
             dispatch(Actions['start']());
+            dispatch(Actions['checkJudge']())
         },
         deletemodal: () => {
             dispatch(Actions['deleteModal']())
-        }
+        },
+        check: () => {
+            dispatch(Actions['check']())
+            dispatch(Actions['checkJudge']())
+        },
+        uncheck: () => {
+            dispatch(Actions['uncheck']())
+            dispatch(Actions['checkJudge']())
+        },
 
     }
 }

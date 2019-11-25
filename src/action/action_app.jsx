@@ -49,5 +49,15 @@ export default {
     },
     deleteModal: () => {
         return { type: 'deleteModal' }
+    },
+
+    check: () => {
+        return { type: 'check' }
+    },
+    uncheck: () => {
+        return { type: 'uncheck' }
+    },
+    checkJudge: () => {
+        return { type: 'checkJudge' }
     }
 }

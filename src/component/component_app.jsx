@@ -3,24 +3,22 @@ import {
     StyleSheet,
     Text,
     View,
-    Platform,
     TouchableHighlight,
-    Animated,
-    Easing,
 } from 'react-native';
 
 import Loading from './loading'
+import Contents from './contents'
 
 export default class App extends React.Component {
 
     constructor(props) {
         super(props);
         window.onkeydown = (e) => {
-            if (e.keyCode == 37) {
-                if (this.props.started == 1) props.decrease();
+            if (e.keyCode === 37) {
+                if (this.props.started === 1) props.decrease();
             }
-            else if (e.keyCode == 39) {
-                if (this.props.started == 1) props.increase();
+            else if (e.keyCode === 39) {
+                if (this.props.started === 1) props.increase();
             }
         }
     }
@@ -29,19 +27,17 @@ export default class App extends React.Component {
     render() {
         let props = this.props;
         ///*
-        const cnt = props.val + 1;
+
         //let st = props.started == 1 ? <h1>{cnt} / {props.data.length} </h1> : <h1>/ {props.data.length} </h1>;
-        let st = props.started == 1 ? <h1>{cnt} / {props.data.length} </h1> : <Text></Text>;
-        let id = props.started == 1 ? <h1>{props.data[cnt].id}</h1> : <Text></Text>;
 
-        let started = props.started === 1 ? " " : "Press start";
-        //let ja = <h1>{props.data[cnt].ja}</h1>;
-        let ja = props.started == 1 ? <h1>[ {props.data[cnt].ja} ]</h1> : <h1> [ {started} ] </h1>;
-        let en = props.availableEn == 1 ? <h1>[ {props.data[cnt].en} ]</h1> : <h1> [ {started} ] </h1>;
 
-        //*/
-        //let load = this.state.loading == 1 ? <Loading /> : <Text></Text>;
-        //let load = props.loading == 1 ? <Text><h1>Loading</h1></Text> : <Text></Text>;
+        let init = <TouchableHighlight
+            onPress={() => props.init()}
+            style={styles.button}
+            underlayColor={'#0A84D0'}
+        >
+            <Text style={styles.buttonText}>Init</Text>
+        </TouchableHighlight>
 
         let start = <TouchableHighlight
             onPress={() => props.start()}
@@ -50,52 +46,17 @@ export default class App extends React.Component {
         >
             <Text style={styles.buttonText}>Start</Text>
         </TouchableHighlight>
-        let update = props.started == 1 ? <TouchableHighlight
-            onPress={() => props.update()}
-            style={styles.button}
-            underlayColor={'#0A84D0'}
-        >
-            <Text style={styles.buttonText}>Update</Text>
-        </TouchableHighlight> : <Text></Text>
 
-        let prev = props.started === 1 ? <TouchableHighlight
-            onPress={() => props.decrease()}
-            style={styles.button}
-            underlayColor={'#0A84D0'}
-        >
-            <Text style={styles.buttonText}>Prev</Text>
-        </TouchableHighlight> : <Text></Text>;
-        let next = props.started === 1 ? <TouchableHighlight
-            onPress={() => props.increase()}
-            style={styles.button}
-            underlayColor={'#0A84D0'}
-        >
-            <Text style={styles.buttonText}>Next</Text>
-        </TouchableHighlight> : <Text></Text>;
+        let contents = props.started == 1 ? <Contents props={props} /> : <Text></Text>;
 
         return <div>
             <Loading props={props} />
             <View style={styles.container}>
+                {init}
                 {start}
-                {update}
             </View>
+            {contents}
 
-            <View style={styles.container}>
-                <Text>{st}</Text>
-            </View>
-            <View style={styles.container}>
-                {prev}
-                {next}
-            </View>
-            <View style={styles.container}>
-                <Text>{id}</Text>
-            </View>
-            <View style={styles.container}>
-                <Text style={styles.jaText}>{ja}</Text>
-            </View>
-            <View style={styles.container}>
-                <Text style={styles.enText}>{en}</Text>
-            </View>
         </div>
 
 
@@ -104,7 +65,7 @@ export default class App extends React.Component {
 }
 
 
-
+//            <Check props={props} />
 
 const styles = StyleSheet.create({
     container: {

@@ -3,10 +3,7 @@ import {
     StyleSheet,
     Text,
     View,
-    Platform,
     TouchableHighlight,
-    Animated,
-    Easing,
 } from 'react-native';
 
 import Modal from 'react-modal'
@@ -17,7 +14,7 @@ export default class Loading extends React.Component {
         let props = this.props.props
 
         ///*
-        let modal_button = props.updateFailed == 1 ? <div>
+        let modal_button = props.updateFailed === 1 ? <div>
             <h1>Loading Failed</h1>
             <TouchableHighlight
                 onPress={() => props.deletemodal()}
@@ -63,7 +60,8 @@ export default class Loading extends React.Component {
             </View>
         </Modal>
         //*/
-        let update_check = props.storedComplete == 1 ? update_already : load;
+
+        let update_check = props.storedCompleted === 1 ? update_already : load;
         //let update_check = load;
 
         return update_check;
