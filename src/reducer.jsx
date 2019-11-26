@@ -8,13 +8,15 @@ const initialState = {
     data: Initialdata,
     started: 0,
     timerId: null,
-    storedData: localStorage.getItem('all'),
-    storedComplete: 0,
+    //storedData: null,
+    storedCompleted: 0,
     updateFailed: 0,
     modal: 0,
+    checked: 0,
+    generatedFromCheck: 0,
+    modalChecked: 0,
+    //checkedData: null,
 }
-
-
 
 export function md5hex(str) {
     const md5 = crypto.createHash('md5')
@@ -24,20 +26,10 @@ export function md5hex(str) {
 export default function reducer(state = initialState, action) {
     switch (action.type) {
         case 'INIT': {
-            var oldid = state.timerId;
+            let oldid = state.timerId;
             clearTimeout(oldid);
-            /*
-            return Object.assign({}, state, {
-                val: 0,
-                availableEn: 0,
-                loading: 0,
-                data: Initialdata,
-                started: 0,
-                timerId: null,
-                updateFailed: 0,
-                modal: 0,
-            })
-            */
+            localStorage.setItem('all', 0);
+            localStorage.setItem('checked', 0);
             return initialState
         }
         case 'INCREMENT': {
@@ -52,7 +44,7 @@ export default function reducer(state = initialState, action) {
         }
         case 'UPDATE': {
 
-            var d = action.data;
+            let d = action.data;
 
             //console.log(md5hex(JSON.stringify(d)));
             //if (state.storedData != null) console.log(md5hex(JSON.stringify(state.storedData)));
@@ -75,9 +67,9 @@ export default function reducer(state = initialState, action) {
             })
         }
         case 'clearEn': {
-            var oldid = state.timerId;
+            let oldid = state.timerId;
             clearTimeout(oldid);
-            var id = action.id
+            let id = action.id
             return Object.assign({}, state, {
                 availableEn: 0,
                 timerId: id
@@ -89,23 +81,50 @@ export default function reducer(state = initialState, action) {
             })
         }
         case 'start': {
+            let data = state.data;
+            //let sc = state.storeComplete;
+            let sc = 0;
+            //let checkedData = state.checkedData;
 
-            if (state.storedData != null) {
-                var ldata_md5 = md5hex(JSON.stringify(state.storedData))
-                if (ldata_md5 == "7ed676711475ac290adafd8368dd573f") {
-                    return Object.assign({}, state, {
-                        started: 1,
-                        val: 0,
-                        data: JSON.parse(state.storedData),
-                        storedComplete: 1
-                    })
+            let storedData = localStorage.getItem('all');
+
+            let checkedData = localStorage.getItem('checked');
+            let cDSet = new Set();
+
+            if (storedData != 0) {
+                let ldata_md5 = md5hex(JSON.stringify(storedData))
+                if (ldata_md5 === "7ed676711475ac290adafd8368dd573f") {
+
+                    data = JSON.parse(storedData);
+                    sc = 1;
                 }
 
             }
+            //console.log(sc);
+            ///*
+            if (checkedData == 0) {
+
+                checkedData = new Set();
+                let jsonStr = JSON.stringify(Array.from(checkedData));
+                localStorage.setItem('checked', jsonStr);
+            }
+            else {
+                let cDArray = JSON.parse(checkedData);
+                cDArray.forEach((x) => {
+                    cDSet.add(x);
+                });
+            }
+            //*/
+
+            //console.log(sc);
 
             return Object.assign({}, state, {
                 started: 1,
-                val: 0
+                val: 0,
+                data: data,
+                storedCompleted: sc,
+                checkedData: cDSet,
+                generatedFromCheck: 0,
             })
         }
         case 'initVal': {
@@ -120,7 +139,7 @@ export default function reducer(state = initialState, action) {
             })
         }
         case 'deleteTimer': {
-            var oldid = state.timerId;
+            let oldid = state.timerId;
             clearTimeout(oldid);
             return state;
         }
@@ -151,6 +170,93 @@ export default function reducer(state = initialState, action) {
                 modal: 0
             })
         }
+        case 'check': {
+
+            let checkedData_new = state.checkedData;
+            checkedData_new.add(state.data[state.val].id);
+            console.log(checkedData_new);
+            localStorage.setItem('checked', JSON.stringify(Array.from(checkedData_new)));
+            return Object.assign({}, state, {
+                checkedData: checkedData_new
+            })
+
+        }
+        case 'uncheck': {
+
+            let checkedData_new = state.checkedData;
+            checkedData_new.delete(state.data[state.val].id);
+            console.log(checkedData_new);
+            localStorage.setItem('checked', JSON.stringify(Array.from(checkedData_new)));
+            return Object.assign({}, state, {
+                checkedData: checkedData_new
+            })
+
+        }
+        case 'checkJudge': {
+
+            return Object.assign({}, state, {
+                checked: state.checkedData.has(state.data[state.val].id)
+            })
+        }
+        case 'generateFromChecked': {
+
+            if (state.checkedData.size == 0) {
+                return Object.assign({}, state, {
+                    modalChecked: 1
+                })
+            }
+
+            let data_new = [];
+            let storedData = localStorage.getItem('all');
+
+            let sorted = []
+            state.checkedData.forEach((x) => {
+                sorted.push(x);
+            });
+            sorted.sort();
+            sorted.forEach((x) => {
+                data_new.push(JSON.parse(storedData).find((item, index) => {
+                    return (item.id === x);
+                }));
+            });
+            console.log(data_new);
+            return Object.assign({}, state, {
+                started: 1,
+                val: 0,
+                data: data_new,
+                generatedFromCheck: 1,
+                //storedCompleted: sc,
+                //checkedData: cDSet,
+            })
+        }
+        case 'clearCheck': {
+            //let oldid = state.timerId;
+            //clearTimeout(oldid);
+            localStorage.setItem('checked', 0);
+            let cDSet = new Set();
+            let jsonStr = JSON.stringify(Array.from(cDSet));
+            localStorage.setItem('checked', jsonStr);
+
+            return Object.assign({}, state, {
+                checkedData: cDSet,
+                //storedCompleted: sc,
+                //checkedData: cDSet,
+            })
+        }
+        case 'checkGenerate': {
+            return state;
+        }
+        case 'createModalChecked': {
+            return Object.assign({}, state, {
+                modalChecked: 1
+            })
+        }
+        case 'deleteModalChecked': {
+            return Object.assign({}, state, {
+                modalChecked: 0
+            })
+        }
+
         default:
             return state
     }

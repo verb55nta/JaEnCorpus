@@ -59,5 +59,20 @@ export default {
     },
     checkJudge: () => {
         return { type: 'checkJudge' }
-    }
+    },
+    generateFromChecked: () => {
+        return { type: 'generateFromChecked' }
+    },
+    clearCheck: () => {
+        return { type: 'clearCheck' }
+    },
+    checkGenerate: () => {
+        return { type: 'checkGenerate' }
+    },
+    createModalChecked: () => {
+        return { type: 'createModalChecked' }
+    },
+    deleteModalChecked: () => {
+        return { type: 'deleteModalChecked' }
+    },
 }

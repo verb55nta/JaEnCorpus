@@ -19,16 +19,25 @@ export default class Check extends React.Component {
         </TouchableHighlight>;
         let uncheck = <TouchableHighlight
             onPress={() => props.uncheck()}
-            style={styles.button}
+            style={styles.button2}
             underlayColor={'#0A84D0'}
         >
             <Text style={styles.buttonText}>Uncheck</Text>
         </TouchableHighlight>;
 
+        let clearCheck = <TouchableHighlight
+            onPress={() => props.clearCheck()}
+            style={styles.button}
+            underlayColor={'#0A84D0'}
+        >
+            <Text style={styles.buttonText}>Clear All Check</Text>
+        </TouchableHighlight>
+
         let judge = props.checked === true ? uncheck : check
 
         return <View style={styles.container}>
             {judge}
+            {clearCheck}
         </View>
 
     }
@@ -58,6 +67,14 @@ const styles = StyleSheet.create({
         marginHorizontal: 10,
         marginTop: 10,
         backgroundColor: '#1B95E0',
+    },
+    button2: {
+        borderRadius: 3,
+        padding: 20,
+        marginVertical: 10,
+        marginHorizontal: 10,
+        marginTop: 10,
+        backgroundColor: '#FF3530',
     },
     buttonText: {
         color: '#fff',

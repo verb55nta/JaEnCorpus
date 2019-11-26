@@ -7,20 +7,20 @@ import {
 } from 'react-native';
 
 import Check from './check'
-
+import GenerateFromChecked from './generateFromChecked'
 
 export default class Contents extends React.Component {
 
     render() {
         let props = this.props.props;
-        const cnt = props.val + 1;
-        let st = <h1>{cnt} / {props.data.length} </h1>
+        const cnt = props.val;
+        let st = <h1>{cnt + 1} / {props.data.length} </h1>
         let id = <h1>{props.data[cnt].id}</h1>
 
         let started = " ";
         //let ja = <h1>{props.data[cnt].ja}</h1>;
         let ja = <h1>[ {props.data[cnt].ja} ]</h1>
-        let en = <h1>[ {props.data[cnt].en} ]</h1>
+        let en = props.availableEn == 1 ? <h1>[ {props.data[cnt].en} ]</h1> : <h1>[  ]</h1>
         let update = props.storedCompleted === 1 ? <Text></Text> : <TouchableHighlight
             onPress={() => props.update()}
             style={styles.button}
@@ -48,16 +48,9 @@ export default class Contents extends React.Component {
             <View style={styles.container}>
                 <Text>{update}</Text>
             </View>
+
             <View style={styles.container}>
                 <Text>{st}</Text>
-            </View>
-            <View style={styles.container}>
-                {prev}
-                {next}
-            </View>
-            <Check props={props} />
-            <View style={styles.container}>
-                <Text>{id}</Text>
             </View>
             <View style={styles.container}>
                 <Text style={styles.jaText}>{ja}</Text>
@@ -65,6 +58,15 @@ export default class Contents extends React.Component {
             <View style={styles.container}>
                 <Text style={styles.enText}>{en}</Text>
             </View>
+            <View style={styles.container}>
+                {prev}
+                {next}
+            </View>
+            <Check props={props} />
+
+
+
+            <GenerateFromChecked props={props} />
         </div>
     }
 
@@ -108,3 +110,8 @@ const styles = StyleSheet.create({
         color: '#888'
     }
 });
+/*
+let test=<View style={styles.container}>
+                <Text>{id}</Text>
+            </View>
+            */

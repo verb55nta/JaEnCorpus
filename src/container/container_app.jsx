@@ -101,7 +101,22 @@ function mapDispatchToProps(dispatch) {
             dispatch(Actions['uncheck']())
             dispatch(Actions['checkJudge']())
         },
-
+        generateFromChecked: () => {
+            dispatch(Actions['generateFromChecked']())
+            dispatch(Actions['checkJudge']())
+            clearTime(dispatch);
+        },
+        clearCheck: () => {
+            dispatch(Actions['clearCheck']())
+            dispatch(Actions['checkJudge']())
+            //dispatch(Actions['start']())
+        },
+        createModalChecked: () => {
+            dispatch(Actions['createModalChecked']())
+        },
+        deleteModalChecked: () => {
+            dispatch(Actions['deleteModalChecked']())
+        },
     }
 }
 

@@ -17,7 +17,7 @@ export default class Loading extends React.Component {
         let modal_button = props.updateFailed === 1 ? <div>
             <h1>Loading Failed</h1>
             <TouchableHighlight
-                onPress={() => props.deletemodal()}
+                onPress={() => props.deleteModal()}
                 style={styles.button}
                 underlayColor={'#0A84D0'}
             >
@@ -29,7 +29,7 @@ export default class Loading extends React.Component {
         let modal_update_already = <div>
             <h1>You have already updated</h1>
             <TouchableHighlight
-                onPress={() => props.deletemodal()}
+                onPress={() => props.deleteModal()}
                 style={styles.button}
                 underlayColor={'#0A84D0'}
             >

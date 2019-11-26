@@ -9,6 +9,7 @@ import {
 import Loading from './loading'
 import Contents from './contents'
 
+
 export default class App extends React.Component {
 
     constructor(props) {
@@ -46,6 +47,7 @@ export default class App extends React.Component {
         >
             <Text style={styles.buttonText}>Start</Text>
         </TouchableHighlight>
+
 
         let contents = props.started == 1 ? <Contents props={props} /> : <Text></Text>;
 
