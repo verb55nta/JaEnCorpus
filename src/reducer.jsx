@@ -174,7 +174,7 @@ export default function reducer(state = initialState, action) {
 
             let checkedData_new = state.checkedData;
             checkedData_new.add(state.data[state.val].id);
-            console.log(checkedData_new);
+            console.debug(checkedData_new);
             localStorage.setItem('checked', JSON.stringify(Array.from(checkedData_new)));
             return Object.assign({}, state, {
                 checkedData: checkedData_new
@@ -185,7 +185,7 @@ export default function reducer(state = initialState, action) {
 
             let checkedData_new = state.checkedData;
             checkedData_new.delete(state.data[state.val].id);
-            console.log(checkedData_new);
+            console.debug(checkedData_new);
             localStorage.setItem('checked', JSON.stringify(Array.from(checkedData_new)));
             return Object.assign({}, state, {
                 checkedData: checkedData_new
@@ -219,7 +219,7 @@ export default function reducer(state = initialState, action) {
                     return (item.id === x);
                 }));
             });
-            console.log(data_new);
+            console.debug(data_new);
             return Object.assign({}, state, {
                 started: 1,
                 val: 0,

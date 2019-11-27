@@ -30,7 +30,7 @@ export default class Check extends React.Component {
             style={styles.button}
             underlayColor={'#0A84D0'}
         >
-            <Text style={styles.buttonText}>Clear All Check</Text>
+            <Text style={styles.buttonText}>Clear All Checks</Text>
         </TouchableHighlight>
 
         let judge = props.checked === true ? uncheck : check

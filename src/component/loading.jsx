@@ -23,7 +23,9 @@ export default class Loading extends React.Component {
             >
                 <Text style={styles.buttonText}>OK</Text>
             </TouchableHighlight>
-        </div> : <Text> <h1>Loading...</h1> </Text>
+        </div> : <div><Text> <h1>Loading...</h1> </Text>
+                <Text style={styles.cautionText}> (This might take a while. ) </Text>
+            </div>
         //*/
         ///*
         let modal_update_already = <div>
@@ -69,8 +71,6 @@ export default class Loading extends React.Component {
     }
 
 
-
-
 }
 
 const styles = StyleSheet.create({
@@ -105,6 +105,10 @@ const styles = StyleSheet.create({
     jaText: {
         fontSize: 10,
         color: '#000'
+    },
+    cautionText: {
+        fontSize: 16,
+        color: '#888'
     },
     enText: {
         fontSize: 8,

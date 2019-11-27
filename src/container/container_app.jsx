@@ -44,7 +44,7 @@ function mapDispatchToProps(dispatch) {
             dispatch(Actions['createModal']());
             var ldata = localStorage.getItem('all');
             if (ldata != null && (md5hex(JSON.stringify(ldata)) === "7ed676711475ac290adafd8368dd573f")) {
-                console.log("You have already updated");
+                console.debug("You have already updated");
                 dispatch(Actions['updateCompleted']());
                 //dispatch(Actions['deleteModal']());
             }
@@ -61,21 +61,23 @@ function mapDispatchToProps(dispatch) {
 
                 await axios.get(server, { params: {} })
                     .then((re) => {
-                        console.log("get");
+                        console.debug("get");
                         res = re;
                     }, () => { }
                     ).catch(() => {
 
                     });
 
-                //this.data = JSON.parse(res.data.body);
-                var d = JSON.parse(res.data.body);
+                let d = JSON.parse(res.data.body);
+                console.debug(md5hex(JSON.stringify(d)));
 
-                if (Object.keys(d).length === 0) {
-                    console.log("no data")
+                //if (md5hex(JSON.stringify(d)) !== "7ed676711475ac290adafd8368dd573f") {
+                if (md5hex(JSON.stringify(d)) !== "ad4477322882172392f8b21676d385d9") {
+                    //console.log("no data")
                     dispatch(Actions["updateFailed"]())
                 }
                 else {
+
                     clearTime(dispatch);
                     dispatch(Actions['init']());
                     dispatch(Actions['update'](d));
@@ -90,7 +92,7 @@ function mapDispatchToProps(dispatch) {
             dispatch(Actions['start']());
             dispatch(Actions['checkJudge']())
         },
-        deletemodal: () => {
+        deleteModal: () => {
             dispatch(Actions['deleteModal']())
         },
         check: () => {

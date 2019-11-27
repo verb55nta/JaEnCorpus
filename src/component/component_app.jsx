@@ -54,7 +54,6 @@ export default class App extends React.Component {
         return <div>
             <Loading props={props} />
             <View style={styles.container}>
-                {init}
                 {start}
             </View>
             {contents}
