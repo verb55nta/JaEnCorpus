@@ -1,7 +1,7 @@
 self.__precacheManifest = [
   {
-    "revision": "581f00ffdb5efb6065c1",
-    "url": "/JaEnCorpus/static/js/main.581f00ff.chunk.js"
+    "revision": "480c4d252cef65bb1216",
+    "url": "/JaEnCorpus/static/js/main.480c4d25.chunk.js"
   },
   {
     "revision": "812de208bb11ebfeab14",
@@ -12,7 +12,7 @@ self.__precacheManifest = [
     "url": "/JaEnCorpus/static/js/2.a80697b0.chunk.js"
   },
   {
-    "revision": "50e27905b2cd519a2f152c334d40f41b",
+    "revision": "1f36750615b9ffc42725bd3244c05992",
     "url": "/JaEnCorpus/index.html"
   }
 ];
